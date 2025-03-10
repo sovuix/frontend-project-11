@@ -1,21 +1,4 @@
-// const path = require('path');
-
-// module.exports = {
-//   entry: './src/index.js',
-//   output: {
-//     filename: 'bundle.js', 
-//     path: path.resolve(__dirname, 'dist'),
-//     clean: true,
-//   },
-//   mode: 'development',
-//   devServer: {
-//     static: './dist',
-//     hot: true,
-//   },
-//   resolve: {
-//     extensions: ['.js'],
-//   },
-// };
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 
 module.exports = {
@@ -25,7 +8,17 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     clean: true,
   },
+  stats: {
+    children: true,
+  },
   mode: 'development',
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: './dist/index.html',
+      filename: 'index.html',
+      inject: 'body',
+    }),
+  ],
   module: {
     rules: [
       {
