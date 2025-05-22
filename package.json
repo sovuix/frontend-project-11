@@ -3,25 +3,17 @@
   "version": "1.0.0",
   "description": "[![Actions Status](https://github.com/sovuix/frontend-project-11/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/sovuix/frontend-project-11/actions)",
   "main": "index.js",
+  "devDependencies": {
+    "vite": "^6.3.5"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack",
-    "start": "webpack serve"
+    "dev": "vite",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
-  "keywords": [],
-  "devDependencies": {
-    "bootstrap": "^5.3.3",
-    "css-loader": "^7.1.2",
-    "html-webpack-plugin": "^5.6.3",
-    "style-loader": "^4.0.0",
-    "webpack": "^5.98.0",
-    "webpack-cli": "^6.0.1",
-    "webpack-dev-server": "^5.2.0"
-  },
   "dependencies": {
-    "on-change": "^5.0.1",
+    "bootstrap": "^5.3.6",
     "yup": "^1.6.1"
   }
 }

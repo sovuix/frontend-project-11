@@ -1,0 +1,6 @@
+{
+    "errors" : {
+      "required": "required field",
+      "invalidUrl": "incorrect URL"
+    }
+  }
