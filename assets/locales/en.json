@@ -1,6 +1,7 @@
 {
     "errors" : {
       "required": "required field",
-      "invalidUrl": "incorrect URL"
+      "invalidUrl": "incorrect URL",
+      "duplicateUrl": "This URL has already been added"
     }
   }
