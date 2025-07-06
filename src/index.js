@@ -1,91 +1,102 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.js";
 import * as yup from 'yup';
-// import { watch } from './view';
-// import initI18n from './i18n/i18n.js';
-// import { initI18n, i18next } from './i18n/i18n.js';
+import { setLocale } from 'yup';
+import initI18n from './i18n/i18n.js'
 
-// // Создаем схему валидации для URL. Добавить приверку уникаьлности добавленных url
-// const urlSchema = yup.object().shape({
-//   url: yup
-//     .string()
-//     .required(t('errors.requred')) // вынести в i18n. Вместо строки используем ключ в переводах
-//     .url(t('errors.')), // вынести в i18n
-// });
 
 const elements = {
   urlInput: document.querySelector('#url-input'),
   form: document.querySelector('.rss-form'),
-  feedback: document.querySelector('.feedback')
-  // form: ,
-}
+  feedback: document.querySelector('.feedback'),
+};
 
-/*
-Модель:
-- данные feed
-*/
-
-elements.form.addEventListener('submit', (e) => {
-  e.preventDefault();
-
-  const url = elements.urlInput.value.trim();
-
-  const dataToValidate = { url };
-
-  initI18n().then(() => {
-    const urlSchema = yup.object().shape({
-      url: yup
-        .string()
-        .required(() => i18next.t('errors.required')) 
-        .url(() => i18next.t('errors')),
+initI18n()
+  .then((i18n) => {
+    setLocale({
+      mixed: {
+        required: () => i18n.t('errors.required'),
+        notOneOf: () => i18n.t('errors.duplicateUrl'),
+      },
+      string: {
+        url: () => i18n.t('errors.invalidUrl'),
+      },
     });
 
-    urlSchema
-      .validate(dataToValidate) 
-      .then(() => {
-        console.log('Validation passed');
-        elements.feedback.textContent = ''; 
-      })
-      .catch((err) => {
-        console.error('Validation error:', err.errors);
-        elements.feedback.textContent = err.errors.map((error) => i18next.t(error)).join(', '); 
-      });
+    if (elements.form) {
+      elements.form.addEventListener('submit', handleFormSubmit);
+    }
+  })
+  .catch((error) => {
+    console.error('Initialization failed:', error);
+    if (elements.feedback) {
+      elements.feedback.textContent = 'Failed to load translations';
+    }
   });
-});
+
+function handleFormSubmit(e) {
+  e.preventDefault();
+  const url = elements.urlInput.value.trim();
+
+  const schema = yup.object().shape({
+    url: yup
+    .string()
+    .required()
+    .url()
+    .notOneOf(state.feeds),
+  });
+
+  schema
+    .validate({ url })
+    .then(() => {
+      state.feeds.push(url); 
+    console.log('Добавленные фиды:', state.feeds);
+    
+
+    elements.feedback.textContent = '';
+    elements.urlInput.style.borderColor = '';
+    elements.urlInput.value = ''; 
+
+    })
+    .catch((error) => {
+      console.error('Validation error:', error.message);
+      elements.feedback.textContent = error.message;
+      elements.urlInput.style.borderColor = 'red';
+      elements.urlInput.value = '';
+      elements.urlInput.focus();
+    });
+}
 
 
-// const feeds = []; // опишем как состояние
-// формат
 const state = {
   feeds: [], // урлы которые мы добавляем
   errors: [], // массив ошибок, ключи из i18n
 };
 
 
+// ЗАКОММЕНТИРОВАЛ
 
-const watchedState = watch(
-  state,
-  {}, // i18n
-  elements
-);
+// const watchedState = watch(
+//   state,
+//   {}, // i18n
+//   elements
+// );
 
-function addFeed(url) {
-  if (state.feeds.includes(url)) { // давай попробуем добоавить это все в urlSchema
-    showError('Этот URL уже существует');
-    return false;
-  }
+// function addFeed(url) {
+//   if (state.feeds.includes(url)) { // давай попробуем добоавить это все в urlSchema
+//     showError('Этот URL уже существует');
+//     return false;
+//   }
 
-  watchedState.feeds.push(url);
-  clearError();
-}
+//   watchedState.feeds.push(url);
+//   clearError();
+// }
 
-const form = document.querySelector('.rss-form');
-const urlInput = form.querySelector('#url-input');
 
-form.addEventListener('submit', (e) => {
-  e.preventDefault();
 
-  const url = urlInput.value.trim(); 
+
+
+
 
   // urlSchema
   //   .validate({ url })
@@ -108,7 +119,9 @@ form.addEventListener('submit', (e) => {
   //     //   showError('Некорректный URL');
   //     // }
   //   });
-});
+
+
+
 
 
 
