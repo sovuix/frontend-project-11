@@ -13,152 +13,71 @@ const elements = {
 };
 
 
-
-
-const runApp = (i18n) => {
-initI18n()
-  .then((i18n) => {
-    setLocale({
-      mixed: {
-        // required: (count) => ({key: 'errors.required', count}),
-        // notOneOf: () => 'errors.duplicateUrl',
-        required: 'errors.required',
-        notOneOf: 'errors.duplicateUrl',
-      },
-      string: {
-        // url: () => i18n.t('errors.invalidUrl'),
-        url: 'errors.invalidUrl',
-      },
-    });
-    runApp(i18n);
-
-    if (elements.form) {
-      elements.form.addEventListener('submit', handleFormSubmit);
-    }
-  })
-  .catch((error) => {
-    console.error('Initialization failed:', error);
-  });
-
-function handleFormSubmit(e) {
-  e.preventDefault();
-  const url = elements.urlInput.value.trim();
-
-  const schema = yup.object().shape({
-    url: yup
-    .string()
-    .required()
-    .url()
-    .notOneOf(state.feeds)
-  });
-
-  schema
-    .validate({ url })
-    .then(() => {
-      state.feeds.push(url); 
-    console.log('Добавленные фиды:', state.feeds);
-    
-
-    // elements.feedback.textContent = '';
-    // elements.urlInput.style.borderColor = '';
-    // elements.urlInput.value = ''; 
-
-    })
-    .catch((error) => {
-      console.error('Validation error:', error.message);
-      state.errors = error.errors;
-      // error.inner.forEach(err => {
-        // state.errors.push(err.message); // message теперь содержит ключ из yup
-      // });
-      console.log(state.errors);
-      
-      // идет во view
-      // elements.feedback.textContent = error.message;
-      // elements.urlInput.style.borderColor = 'red';
-      // elements.urlInput.value = '';
-      // elements.urlInput.focus();
-      
-    });
-}
-
-
-
+const runApp = () => {
   const state = {
-    feeds: [], 
+    feeds: [],
     errors: [],
   }
 
+  initI18n()
+    .then((i18n) => {
+      setLocale({
+        mixed: {
+          required: 'errors.required',
+          notOneOf: 'errors.duplicateUrl',
+        },
+        string: {
+          url: 'errors.invalidUrl',
+        },
+      });
+      const watchedState = watch(
+        state,
+        i18n,
+        elements
+      );
+      if (elements.form) {
+        elements.form.addEventListener('submit', (e) => handleFormSubmit(e, watchedState))
+      }
+    })
 
-  // ЗАКОММЕНТИРОВАЛ
+  function handleFormSubmit(e, watchedState) {
+    e.preventDefault();
+    const url = elements.urlInput.value.trim();
 
-  const watchedState = watch(
-    state,
-    i18n,
-    elements
-  );
-  // console.log('1.')
-  // watchedState.feeds = [];
-  // console.log('2.')
-  // watchedState.feeds.push('url');
+    const schema = yup.object().shape({
+      url: yup
+        .string()
+        .required()
+        .url()
+        .notOneOf(watchedState.feeds)
+    });
 
-  // console.log('3.')
-  // watchedState.innerObj.a.b = 1;
+    schema
+      .validate({ url })
+      .then(() => {
+
+        watchedState.feeds = [...watchedState.feeds, url];
+        watchedState.errors = [];
+        elements.urlInput.value = '';
+        console.log(state.feeds);
 
 
-  // function addFeed(url) {
-  //   if (state.feeds.includes(url)) { // давай попробуем добоавить это все в urlSchema
-  //     showError('Этот URL уже существует');
-  //     return false;
-  //   }
-
-  //   watchedState.feeds.push(url);
-  //   clearError();
-  // }
+      })
+      .catch((error) => {
+        watchedState.errors = error.errors;
+      });
+  }
 }
+runApp();
 
 
 
 
 
 
-  // urlSchema
-  //   .validate({ url })
-  //   .then(() => {
-  //     // if (addFeed(url)) {
-  //       // мы должны обработатать ошибки
-  //       // 1. загрузки
-  //       // 2. там не xml
-
-  //       state.feeds.push(url);
-  //       form.reset();
-  //       urlInput.focus();
-  //     // }
-  //   })
-  //   .catch((err) => {
-  //     state.errors.push(...err.errors);
-  //     // if (err.errors[0] === 'Поле обязательно для заполнения') {
-  //     //   showError('Поле обязательно для заполнения');
-  //     // } else if (err.errors[0] === 'Некорректный URL') {
-  //     //   showError('Некорректный URL');
-  //     // }
-  //   });
 
 
 
-/*
-const i18nInstance = i18n.createInstance()
 
-const runApp = () => {
-    const watchedState = watch(state, elements, i18nInstance);
-}
-
-i18nInstance.init({
-    lng: defaultLanguage,
-    debug: false,
-    resources,
-}).then(() => {
-    runApp();
-})
-*/
 
 
