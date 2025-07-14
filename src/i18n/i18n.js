@@ -6,13 +6,14 @@ const translations = { en, ru };
 
 const initI18n = () => {
   const lang = localStorage.getItem('lang') || 'ru';
-  return i18next.init({
+  const i18nInstance = i18next.createInstance();
+  return i18nInstance.init({
     lng: lang,
     debug: true,
     resources: {
       [lang]: { translation: translations[lang] }
     }
-  }).then(() => i18next);
+  }).then(() => i18nInstance);
 };
 
 export default initI18n;
