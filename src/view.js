@@ -5,8 +5,8 @@ function showError(state, i18n, elements) {
   clearError();
 
 
-  if (state.errors.length !== 0) {
-    elements.feedback.textContent = state.errors.map(key => i18n.t(key)).join('\n');
+  if (state.form.errors.length !== 0) {
+    elements.feedback.textContent = state.form.errors.map(key => i18n.t(key)).join('\n');
     elements.urlInput.classList.add('is-invalid');
   }
 
@@ -23,11 +23,15 @@ function clearError() {
 export const watch = (state, i18n, elements) => {
   return onChange(state, (path) => {
     switch (path) {
-      case 'feeds':
+      case 'form.feeds':
         break;
-      case 'errors':
+      case 'form.errors':
         showError(state, i18n, elements);
         break;
+      // тест
+      // case 'test':
+      //   elements.posts.textContent = state.test.title;
+      //   break;
     }
   })
 };

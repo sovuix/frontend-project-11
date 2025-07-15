@@ -5,18 +5,28 @@ import { setLocale } from 'yup';
 import initI18n from './i18n/i18n.js'
 import { watch } from "./view.js";
 
+import gettaUrl from './getRss.js';
+
 
 const elements = {
   urlInput: document.querySelector('#url-input'),
   form: document.querySelector('.rss-form'),
   feedback: document.querySelector('.feedback'),
+  // posts: document.querySelector('.posts') тест
 };
 
 
 const runApp = () => {
   const state = {
-    feeds: [],
-    errors: [],
+    form: {
+      feeds: [],
+      errors: [],
+    },
+    loading: {
+      status: 'loading',
+      error: '',
+    },
+    test: [],
   }
 
   initI18n()
@@ -30,11 +40,19 @@ const runApp = () => {
           url: 'errors.invalidUrl',
         },
       });
+
       const watchedState = watch(
         state,
         i18n,
         elements
       );
+      //тест
+      // watchedState.loading = true;
+      // gettaUrl()
+      //   .then((resp) => watchedState.test = resp)
+      //   .then(() => console.log(watchedState.test.title));
+
+
       if (elements.form) {
         elements.form.addEventListener('submit', (e) => handleFormSubmit(e, watchedState))
       }
@@ -49,26 +67,30 @@ const runApp = () => {
         .string()
         .required()
         .url()
-        .notOneOf(watchedState.feeds)
+        .notOneOf(watchedState.form.feeds)
     });
 
     schema
       .validate({ url })
       .then(() => {
 
-        watchedState.feeds = [...watchedState.feeds, url];
-        watchedState.errors = [];
+        watchedState.form = {
+          feeds: [...watchedState.form.feeds, url],
+          errors: []
+        }
         elements.urlInput.value = '';
-        console.log(state.feeds);
-
-
       })
       .catch((error) => {
-        watchedState.errors = error.errors;
+        watchedState.form.errors = error.errors;
       });
   }
+
+
 }
 runApp();
+
+
+
 
 
 

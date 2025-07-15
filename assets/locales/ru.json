@@ -1,7 +1,7 @@
 {
-  "errors" : {
+  "errors": {
     "required": "Поле обязательно для заполнения",
-    "invalidUrl": "Некорректный URL",
+    "invalidUrl": "Ссылка должна быть валидным URL",
     "duplicateUrl": "Такой URL уже добавлен"
   }
 }
