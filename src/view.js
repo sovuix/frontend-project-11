@@ -28,10 +28,9 @@ export const watch = (state, i18n, elements) => {
       case 'form.errors':
         showError(state, i18n, elements);
         break;
-      // тест
-      // case 'test':
-      //   elements.posts.textContent = state.test.title;
-      //   break;
+      case 'test':
+        elements.posts.textContent = state.test;
+        break;
     }
   })
 };

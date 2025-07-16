@@ -12,7 +12,7 @@ const elements = {
   urlInput: document.querySelector('#url-input'),
   form: document.querySelector('.rss-form'),
   feedback: document.querySelector('.feedback'),
-  // posts: document.querySelector('.posts') тест
+  posts: document.querySelector('.posts')
 };
 
 
@@ -46,11 +46,11 @@ const runApp = () => {
         i18n,
         elements
       );
-      //тест
-      // watchedState.loading = true;
-      // gettaUrl()
-      //   .then((resp) => watchedState.test = resp)
-      //   .then(() => console.log(watchedState.test.title));
+      // тест
+      watchedState.loading = true;
+      gettaUrl()
+        .then((resp) => watchedState.test = resp)
+        .then(() => console.log(watchedState.test));
 
 
       if (elements.form) {
