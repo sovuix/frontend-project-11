@@ -50,7 +50,7 @@ const runApp = () => {
       watchedState.loading = true;
       gettaUrl()
         .then((resp) => watchedState.test = resp)
-        .then(() => console.log(watchedState.test));
+        .then(() => console.log(watchedState.state));
 
 
       if (elements.form) {
