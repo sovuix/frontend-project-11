@@ -23,11 +23,9 @@ export default (url = DEFAULT_FEED_URL) => {
 
     return axios.get(proxiedUrl)
         .then((response) => {
-            // 1. Достаём XML из ответа прокси
             const xmlString = response.data.contents;
             const xmlDoc = parser.parseFromString(xmlString, "text/xml");
 
-            // 2. Извлекаем данные из RSS (пример для стандартного RSS 2.0)
             const items = xmlDoc.querySelectorAll("item");
             const feedData = Array.from(items).map((item) => ({
                 title: item.querySelector("title")?.textContent || "Без названия",
@@ -36,10 +34,9 @@ export default (url = DEFAULT_FEED_URL) => {
                 pubDate: item.querySelector("pubDate")?.textContent || "",
             }));
 
-            return feedData; // Массив объектов с данными статей
+            return feedData;
         })
         .catch((error) => {
-            console.error("Ошибка при загрузке RSS:", error);
-            throw error; // Пробрасываем ошибку для обработки в вызывающем коде
+            console.error("Error", error);
         });
 };
