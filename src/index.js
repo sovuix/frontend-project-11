@@ -5,28 +5,27 @@ import { setLocale } from 'yup';
 import initI18n from './i18n/i18n.js'
 import { watch } from "./view.js";
 
-import gettaUrl from './getRss.js';
+import getUrl from './rssFeedParcer.js';
 
 
 const elements = {
   urlInput: document.querySelector('#url-input'),
   form: document.querySelector('.rss-form'),
   feedback: document.querySelector('.feedback'),
-  posts: document.querySelector('.posts')
+  posts: document.querySelector('.posts'),
+  feeds: document.querySelector('.feeds'),
 };
 
 
 const runApp = () => {
   const state = {
-    form: {
       feeds: [],
       errors: [],
-    },
-    loading: {
-      status: 'loading',
-      error: '',
-    },
-    test: [],
+      posts: [],
+      loading: {
+        status: 'loading',
+        error: '',
+      },
   }
 
   initI18n()
@@ -46,12 +45,6 @@ const runApp = () => {
         i18n,
         elements
       );
-      // тест
-      watchedState.loading = true;
-      gettaUrl()
-        .then((resp) => watchedState.test = resp)
-        .then(() => console.log(watchedState.state));
-
 
       if (elements.form) {
         elements.form.addEventListener('submit', (e) => handleFormSubmit(e, watchedState))
@@ -67,23 +60,50 @@ const runApp = () => {
         .string()
         .required()
         .url()
-        .notOneOf(watchedState.form.feeds)
+        .notOneOf(watchedState.feeds)
     });
 
     schema
       .validate({ url })
       .then(() => {
+    
+      // watchedState.feeds = [...watchedState.feeds, url];
+      watchedState.errors = [];
+    
 
-        watchedState.form = {
-          feeds: [...watchedState.form.feeds, url],
-          errors: []
-        }
-        elements.urlInput.value = '';
-      })
-      .catch((error) => {
-        watchedState.form.errors = error.errors;
-      });
-  }
+      watchedState.loading.status = true;
+
+
+      
+      getUrl(url)
+        .then((response) => {
+
+          // проверка
+          watchedState.feeds.push(response.feed);
+          watchedState.posts = response;
+
+          console.log(watchedState.posts.feed.link);
+          console.log(watchedState.feeds);
+          
+          // watchedState.loading.status = false;
+          // console.log(response.feed);
+          
+
+        })
+        .catch((error) => {
+          watchedState.loading.error = error.message;
+          watchedState.loading.status = false;
+        });
+
+      // console.log(watchedState.feeds);
+
+      
+      elements.urlInput.value = '';
+    })
+    .catch((error) => {
+      watchedState.errors = error.errors;
+    });
+}
 
 
 }
