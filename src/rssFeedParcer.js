@@ -15,7 +15,7 @@ function fetchFeed(url = DEFAULT_FEED_URL) {
         .then(response => {
             if (response.status !== 200) {
                 throw new Error('Invalid response from proxy');
-            }
+            }  
             return response.data.contents;
         })
         .catch(error => {
@@ -23,7 +23,7 @@ function fetchFeed(url = DEFAULT_FEED_URL) {
         });
 }
 
-function parseFeed(content) {
+function parseFeed(content, url) {
     try {
         const parser = new DOMParser();
         const xmlDoc = parser.parseFromString(content, "text/xml");
@@ -43,6 +43,7 @@ function parseFeed(content) {
                 title: getTextContent(channel, "title"),
                 description: getTextContent(channel, "description"),
                 link: getTextContent(channel, "link"),
+                url,
             },
             posts: Array.from(xmlDoc.querySelectorAll("item")).map(item => ({
                 title: getTextContent(item, "title"),
@@ -56,10 +57,13 @@ function parseFeed(content) {
     }
 }
 
+// export default function loadRssFeed(url) {
+//     return fetchFeed(url).then(parseFeed);
+// }
 export default function loadRssFeed(url) {
-    return fetchFeed(url).then(parseFeed);
+    return fetchFeed(url)
+        .then((content) => parseFeed(content, url));  
 }
-
 
 
 

@@ -14,6 +14,8 @@ const elements = {
   feedback: document.querySelector('.feedback'),
   posts: document.querySelector('.posts'),
   feeds: document.querySelector('.feeds'),
+  container: document.querySelector('.container-fluid container-xxl p-5'),
+  row: document.querySelector('.row'),
 };
 
 
@@ -60,7 +62,8 @@ const runApp = () => {
         .string()
         .required()
         .url()
-        .notOneOf(watchedState.feeds)
+        // .notOneOf(watchedState.feeds)
+        .notOneOf(watchedState.feeds.map(feed => feed.url))
     });
 
     schema
@@ -83,9 +86,9 @@ const runApp = () => {
             watchedState.posts = response.posts;
             watchedState.loading.status = false;
             console.log(watchedState.posts[0]);
-
-
-
+            console.log(watchedState.feeds[0]);
+            watchedState.feeds.map(feed => console.log(feed.url))
+            
 
           })
           .catch((error) => {
