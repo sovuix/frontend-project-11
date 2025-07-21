@@ -19,13 +19,13 @@ const elements = {
 
 const runApp = () => {
   const state = {
-      feeds: [],
-      errors: [],
-      posts: [],
-      loading: {
-        status: 'loading',
-        error: '',
-      },
+    feeds: [],
+    errors: [],
+    posts: [],
+    loading: {
+      status: 'loading',
+      error: '',
+    },
   }
 
   initI18n()
@@ -66,44 +66,42 @@ const runApp = () => {
     schema
       .validate({ url })
       .then(() => {
-    
-      // watchedState.feeds = [...watchedState.feeds, url];
-      watchedState.errors = [];
-    
 
-      watchedState.loading.status = true;
+        // watchedState.feeds = [...watchedState.feeds, url];
+        watchedState.errors = [];
 
 
-      
-      getUrl(url)
-        .then((response) => {
+        watchedState.loading.status = true;
 
-          // проверка
-          watchedState.feeds.push(response.feed);
-          watchedState.posts = response;
 
-          console.log(watchedState.posts.feed.link);
-          console.log(watchedState.feeds);
-          
-          // watchedState.loading.status = false;
-          // console.log(response.feed);
-          
 
-        })
-        .catch((error) => {
-          watchedState.loading.error = error.message;
-          watchedState.loading.status = false;
-        });
+        getUrl(url)
+          .then((response) => {
 
-      // console.log(watchedState.feeds);
+            // проверка
+            watchedState.feeds.push(response.feed);
+            watchedState.posts = response.posts;
+            watchedState.loading.status = false;
+            console.log(watchedState.posts[0]);
 
-      
-      elements.urlInput.value = '';
-    })
-    .catch((error) => {
-      watchedState.errors = error.errors;
-    });
-}
+
+
+
+          })
+          .catch((error) => {
+            watchedState.loading.error = error.message;
+            watchedState.loading.status = false;
+          });
+
+        // console.log(watchedState.feeds);
+
+
+        elements.urlInput.value = '';
+      })
+      .catch((error) => {
+        watchedState.errors = error.errors;
+      });
+  }
 
 
 }
