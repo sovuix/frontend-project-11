@@ -15,7 +15,7 @@ function fetchFeed(url = DEFAULT_FEED_URL) {
         .then(response => {
             if (response.status !== 200) {
                 throw new Error('Invalid response from proxy');
-            }  
+            }
             return response.data.contents;
         })
         .catch(error => {
@@ -33,7 +33,7 @@ function parseFeed(content, url) {
         }
 
         const channel = xmlDoc.querySelector("channel");
-        if (!channel) throw new Error('No channel found - not a valid RSS feed');
+        if (!channel) throw new Error('not a valid RSS feed');
 
         const getTextContent = (element, selector) =>
             element.querySelector(selector)?.textContent || '';
@@ -62,7 +62,7 @@ function parseFeed(content, url) {
 // }
 export default function loadRssFeed(url) {
     return fetchFeed(url)
-        .then((content) => parseFeed(content, url));  
+        .then((content) => parseFeed(content, url));
 }
 
 

@@ -14,8 +14,7 @@ const elements = {
   feedback: document.querySelector('.feedback'),
   posts: document.querySelector('.posts'),
   feeds: document.querySelector('.feeds'),
-  container: document.querySelector('.container-fluid container-xxl p-5'),
-  row: document.querySelector('.row'),
+  templatePosts: document.getElementById('posts'),
 };
 
 
@@ -88,7 +87,7 @@ const runApp = () => {
             console.log(watchedState.posts[0]);
             console.log(watchedState.feeds[0]);
             watchedState.feeds.map(feed => console.log(feed.url))
-            
+
 
           })
           .catch((error) => {

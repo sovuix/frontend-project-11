@@ -18,29 +18,29 @@ const clearError = () => {
   urlInput.classList.remove('is-invalid');
 }
 
-const testHTML = `
-<template class="test">
-  <ul>
-    <li></li>
-    <li></li>
-  </ul>
-</template>
-`
-
-const renderPosts = (posts, container) => {
-  if (!Array.isArray(posts)) {
-    console.log('oops');
-  }
-  const feedsHtml = posts.map(post =>
-    // `<h5>${post.title}</h5>
-    `<h6>${post.description}</h6>`
-  ).join('');
-  console.log('sdssdsd');
-  
-  container.innerHTML = feedsHtml;
 
 
+const renderTemplatePosts = (elements) => {
+  let container = elements.posts;
+  let tmpl = elements.templatePosts;
+  container.append(tmpl.content.cloneNode(true));
+  // document.body.append(container);
 }
+
+// const renderPosts = (posts, container) => {
+//   if (!Array.isArray(posts)) {
+//     console.log('oops');
+//   }
+//   const feedsHtml = posts.map(post =>
+//     // `<h5>${post.title}</h5>
+//     `<h6>${post.description}</h6>`
+//   ).join('');
+//   console.log('sdssdsd');
+
+//   container.innerHTML = feedsHtml;
+
+
+// }
 
 
 
@@ -53,7 +53,8 @@ export const watch = (state, i18n, elements) => {
         showError(state, i18n, elements);
         break;
       case 'posts':
-        renderPosts(state.posts, elements.posts);
+        // renderPosts(state.posts, elements.posts);
+        renderTemplatePosts(elements);
         break;
       // case 'feeds':
       //   renderFeeds(state.feeds, elements.feeds);
