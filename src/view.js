@@ -20,12 +20,36 @@ const clearError = () => {
 
 
 
-const renderTemplatePosts = (elements) => {
-  let container = elements.posts;
-  let tmpl = elements.templatePosts;
-  container.append(tmpl.content.cloneNode(true));
-  // document.body.append(container);
-}
+
+const renderTemplatePosts = (posts, elements) => {
+  const container = elements.posts;
+  const tmpl = elements.templatePosts;
+
+  const postsList = tmpl.content.querySelector('ul.list-group');
+
+  const postsLi = postsList.querySelector('li');
+
+  postsList.innerHTML = '';
+
+  posts.forEach(post => {
+    const li = postsLi.cloneNode(true);
+    const link = li.querySelector('a.fw-bold');
+    const button = li.querySelector('button');
+
+    if (link && button) {
+      link.href = post.link;
+      link.textContent = post.title;
+      link.dataset.id = post.id;
+      button.dataset.id = post.id;
+    }
+
+    postsList.appendChild(li);
+  });
+
+  container.innerHTML = '';
+  container.appendChild(tmpl.content.cloneNode(true));
+};
+
 
 // const renderPosts = (posts, container) => {
 //   if (!Array.isArray(posts)) {
@@ -54,7 +78,7 @@ export const watch = (state, i18n, elements) => {
         break;
       case 'posts':
         // renderPosts(state.posts, elements.posts);
-        renderTemplatePosts(elements);
+        renderTemplatePosts(state.posts, elements);
         break;
       // case 'feeds':
       //   renderFeeds(state.feeds, elements.feeds);
