@@ -51,23 +51,6 @@ const renderTemplatePosts = (posts, elements) => {
 };
 
 
-// const renderPosts = (posts, container) => {
-//   if (!Array.isArray(posts)) {
-//     console.log('oops');
-//   }
-//   const feedsHtml = posts.map(post =>
-//     // `<h5>${post.title}</h5>
-//     `<h6>${post.description}</h6>`
-//   ).join('');
-//   console.log('sdssdsd');
-
-//   container.innerHTML = feedsHtml;
-
-
-// }
-
-
-
 export const watch = (state, i18n, elements) => {
   return onChange(state, (path) => {
     switch (path) {
