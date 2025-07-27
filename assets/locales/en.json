@@ -3,5 +3,8 @@
       "required": "required field",
       "invalidUrl": "incorrect URL",
       "duplicateUrl": "This URL has already been added"
-    }
+    },
+      "success": "RSS loaded successfully",
+      "posts" : "Posts",
+      "feeds" : "Feeds"
   }

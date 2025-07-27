@@ -61,7 +61,6 @@ const runApp = () => {
         .string()
         .required()
         .url()
-        // .notOneOf(watchedState.feeds)
         .notOneOf(watchedState.feeds.map(feed => feed.url))
     });
 
@@ -87,6 +86,7 @@ const runApp = () => {
             console.log(watchedState.posts[0]);
             console.log(watchedState.feeds[0]);
             watchedState.feeds.map(feed => console.log(feed.url))
+            
 
 
           })

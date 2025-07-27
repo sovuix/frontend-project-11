@@ -6,7 +6,7 @@ function showError(state, i18n, elements) {
   if (state.errors.length !== 0) {
     elements.feedback.textContent = state.errors.map(key => i18n.t(key)).join('\n');
     elements.urlInput.classList.add('is-invalid');
-  }
+  } 
 
 }
 
@@ -18,16 +18,17 @@ const clearError = () => {
   urlInput.classList.remove('is-invalid');
 }
 
-
-
-
-const renderTemplatePosts = (posts, elements) => {
+const renderTemplatePosts = (posts, elements, i18n) => {
+  elements.feedback.classList.replace('text-danger','text-success');
+  elements.feedback.textContent = i18n.t('success'); 
   const container = elements.posts;
   const tmpl = elements.templatePosts;
 
   const postsList = tmpl.content.querySelector('ul.list-group');
 
   const postsLi = postsList.querySelector('li');
+  // const title = document.querySelector(".card-title.h4");
+  // title.textContent = i18n.t('posts');
 
   postsList.innerHTML = '';
 
@@ -60,8 +61,7 @@ export const watch = (state, i18n, elements) => {
         showError(state, i18n, elements);
         break;
       case 'posts':
-        // renderPosts(state.posts, elements.posts);
-        renderTemplatePosts(state.posts, elements);
+        renderTemplatePosts(state.posts, i18n, elements);
         break;
       // case 'feeds':
       //   renderFeeds(state.feeds, elements.feeds);
