@@ -1,5 +1,8 @@
-import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap/dist/js/bootstrap.bundle.js";
+// import "bootstrap/dist/css/bootstrap.min.css";
+// import "bootstrap/dist/js/bootstrap.bundle.js";
+import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
+import "../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js";
+
 import * as yup from 'yup';
 import { setLocale } from 'yup';
 import initI18n from './i18n/i18n.js'
@@ -15,6 +18,7 @@ const elements = {
   posts: document.querySelector('.posts'),
   feeds: document.querySelector('.feeds'),
   templatePosts: document.getElementById('posts'),
+  templateFeeds: document.getElementById('feeds'),
 };
 
 
@@ -24,9 +28,13 @@ const runApp = () => {
     errors: [],
     posts: [],
     loading: {
-      status: 'loading',
-      error: '',
+      status: 'idle',
+      // error: '',
     },
+    form: {
+      status: 'filling', // 
+      // error: '' // 
+    }
   }
 
   initI18n()
@@ -54,6 +62,8 @@ const runApp = () => {
 
   function handleFormSubmit(e, watchedState) {
     e.preventDefault();
+    watchedState.form.status = 'submitted';
+    watchedState.loading.status = 'idle';
     const url = elements.urlInput.value.trim();
 
     const schema = yup.object().shape({
@@ -71,28 +81,26 @@ const runApp = () => {
         // watchedState.feeds = [...watchedState.feeds, url];
         watchedState.errors = [];
 
-
-        watchedState.loading.status = true;
-
-
-
+        watchedState.loading.status = 'loading';
         getUrl(url)
           .then((response) => {
+            watchedState.loading.status = 'loaded';
+            watchedState.errors = [];
 
             // проверка
             watchedState.feeds.push(response.feed);
-            watchedState.posts = response.posts;
-            watchedState.loading.status = false;
-            console.log(watchedState.posts[0]);
-            console.log(watchedState.feeds[0]);
+            // тоже надо делать push
+            // watchedState.posts = response.posts;
+            watchedState.posts.push(...response.posts)
+            // watchedState.loading.status = false;
+            // console.log(watchedState.posts[0]);
+            // console.log(watchedState.feeds[0]);
             watchedState.feeds.map(feed => console.log(feed.url))
-            
-
-
           })
           .catch((error) => {
-            watchedState.loading.error = error.message;
-            watchedState.loading.status = false;
+            watchedState.errors = [error.message];
+            // watchedState.loading.error = error.message;
+            // watchedState.loading.status = false;
           });
 
         // console.log(watchedState.feeds);
