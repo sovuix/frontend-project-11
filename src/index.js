@@ -82,10 +82,14 @@ const runApp = () => {
         watchedState.errors = [];
 
         watchedState.loading.status = 'loading';
+        console.log(state.loading.status);
+        
         getUrl(url)
           .then((response) => {
             watchedState.loading.status = 'loaded';
             watchedState.errors = [];
+            console.log(state.loading.status);
+
 
             // проверка
             watchedState.feeds.push(response.feed);
