@@ -6,7 +6,7 @@ const DEFAULT_FEED_URL = "https://lorem-rss.hexlet.app/feed";
 const wrapUrl = (url) => {
     const proxyUrl = new URL(PROXY_HEXLET_URL);
     proxyUrl.searchParams.set('url', url);
-    proxyUrl.searchParams.set('nocache', true);
+    proxyUrl.searchParams.set('disableCache', 'true');
     return proxyUrl;
 }
 
