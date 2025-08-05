@@ -54,6 +54,8 @@ const runApp = () => {
         handleFormSubmit(e, watchedState)
       );
     }
+
+    setTimeout(() => updateFeeds(watchedState), 5000);
   });
 
   // const updateFeeds = (watchedState) => {
@@ -81,13 +83,19 @@ const runApp = () => {
       getUrl(feed.url).then((response) => {
         return _.differenceBy(response.posts, watchedState.posts, "link");
       })
+      .catch(() => [])
     );
 
     Promise.all(feedPromises).then((allNewPosts) => {
+      console.log('получили все фиды', allNewPosts)
+      console.log('фиды', watchedState.feeds)
       const newPosts = _.flatten(allNewPosts);
       if (newPosts.length > 0) {
-        watchedState.posts.unshift(...combinedNewPosts);
+        watchedState.posts.unshift(...newPosts);
       }
+    })
+    .finally(() => {
+      console.log('перезапустили таймер')
       setTimeout(() => updateFeeds(watchedState), 5000);
     });
   };
@@ -127,10 +135,10 @@ const runApp = () => {
           })
           .catch((error) => {
             watchedState.errors = [error.message];
-          })
-          .finally(() => {
-            updateFeeds(watchedState);
           });
+          // .finally(() => {
+          //   updateFeeds(watchedState);
+          // });
 
         elements.urlInput.value = "";
       })
