@@ -7,7 +7,7 @@ function showError(state, i18n, elements) {
     elements.feedback.textContent = state.errors.map(key => i18n.t(key)).join('\n');
     elements.feedback.classList.add('text-danger');
   } else {
-    elements.feedback.classList.replace('text-danger','text-success');
+    elements.feedback.classList.replace('text-danger', 'text-success');
     elements.feedback.textContent = i18n.t('success');
   }
 }
@@ -26,7 +26,7 @@ const renderTemplatePosts = (posts, elements, i18n) => {
   const container2 = tmpl.content.cloneNode(true);
 
   const textPosts = container2.querySelector('.card-title.h4');
-  if(textPosts) {
+  if (textPosts) {
     textPosts.textContent = i18n.t('posts');
   }
 
@@ -62,7 +62,7 @@ const renderTemplateFeeds = (feeds, elements, i18n) => {
 
 
   const textFeeds = container2.querySelector('.card-title.h4');
-  if(textFeeds) {
+  if (textFeeds) {
     textFeeds.textContent = i18n.t('feeds');
   }
 
@@ -85,7 +85,6 @@ const renderTemplateFeeds = (feeds, elements, i18n) => {
   });
 
   container.innerHTML = '';
-  // container.appendChild(tmpl.content.cloneNode(true));
   container.appendChild(container2);
 
 };
@@ -99,7 +98,7 @@ export const watch = (state, i18n, elements) => {
         showError(state, i18n, elements);
         break;
       case 'posts':
-        renderTemplatePosts(state.posts,elements,i18n);
+        renderTemplatePosts(state.posts, elements, i18n);
         break;
       case 'feeds':
         renderTemplateFeeds(state.feeds, elements, i18n);

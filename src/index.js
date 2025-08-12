@@ -26,6 +26,10 @@ const runApp = () => {
     feeds: [],
     errors: [],
     posts: [],
+    uiState: {
+      viewedPostId: null,
+      modalVisible: false,
+    },
     loading: {
       status: "idle",
       // error: '',
@@ -58,46 +62,27 @@ const runApp = () => {
     setTimeout(() => updateFeeds(watchedState), 5000);
   });
 
-  // const updateFeeds = (watchedState) => {
-  //   watchedState.feeds.forEach((feed) => {
-  //     getUrl(feed.url)
-  //       .then((response) => {
-  //         const newPosts = _.differenceBy(
-  //           response.posts,
-  //           watchedState.posts,
-  //           "link"
-  //         );
-
-  //         if (newPosts.length > 0) {
-  //           watchedState.posts.unshift(...newPosts);
-  //         }
-  //       })
-  //       .catch((error) => {
-  //         console.error(error.message);
-  //       });
-  //   });
-  // };
 
   const updateFeeds = (watchedState) => {
     const feedPromises = watchedState.feeds.map((feed) =>
       getUrl(feed.url).then((response) => {
         return _.differenceBy(response.posts, watchedState.posts, "link");
       })
-      .catch(() => [])
+        .catch(() => [])
     );
 
     Promise.all(feedPromises).then((allNewPosts) => {
-      console.log('получили все фиды', allNewPosts)
-      console.log('фиды', watchedState.feeds)
+      // console.log('получили все фиды', allNewPosts)
+      // console.log('фиды', watchedState.feeds)
       const newPosts = _.flatten(allNewPosts);
       if (newPosts.length > 0) {
         watchedState.posts.unshift(...newPosts);
       }
     })
-    .finally(() => {
-      console.log('перезапустили таймер')
-      setTimeout(() => updateFeeds(watchedState), 5000);
-    });
+      .finally(() => {
+        // console.log('перезапустили таймер')
+        setTimeout(() => updateFeeds(watchedState), 5000);
+      });
   };
 
   function handleFormSubmit(e, watchedState) {
@@ -105,6 +90,7 @@ const runApp = () => {
     watchedState.form.status = "submitted";
     watchedState.loading.status = "idle";
     const url = elements.urlInput.value.trim();
+
 
     const schema = yup.object().shape({
       url: yup
@@ -131,14 +117,25 @@ const runApp = () => {
             watchedState.feeds.push(response.feed);
             watchedState.posts.push(...response.posts);
 
-            // setTimeout(() => updateFeeds(watchedState), 5000);
+            elements.posts.addEventListener("click", (e) => {
+              const button = e.target.closest("button[data-id]");
+              if (!button) return;
+
+              const postId = button.dataset.id;
+              watchedState.uiState.viewedPostId = postId;
+
+              // console.log(postId);
+              // console.log(watchedState.uiState);
+
+            }, true)
+
           })
           .catch((error) => {
             watchedState.errors = [error.message];
           });
-          // .finally(() => {
-          //   updateFeeds(watchedState);
-          // });
+        // .finally(() => {
+        //   updateFeeds(watchedState);
+        // });
 
         elements.urlInput.value = "";
       })
