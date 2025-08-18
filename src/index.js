@@ -124,8 +124,25 @@ const runApp = () => {
               const postId = button.dataset.id;
               watchedState.uiState.viewedPostId = postId;
 
-              // console.log(postId);
+              console.log(postId);
               // console.log(watchedState.uiState);
+              watchedState.posts.forEach(post => {
+                if (post.id === postId) {
+                  const modalTitle = document.querySelector('.modal-title');
+                  const modalBody = document.querySelector('.modal-body');
+                  const btn = document.querySelector('.btn.btn-primary');
+                  modalTitle.textContent = post.title;
+                  modalBody.innerHTML = post.description;
+                  btn.href = post.link;
+                  console.log(btn)
+                }
+
+              } );
+              const modalElement = document.getElementById('modal');
+              const modal = new bootstrap.Modal(modalElement); // Создаем экземпляр модального окна
+              modal.show();
+
+              console.log(modal);
 
             }, true)
 
