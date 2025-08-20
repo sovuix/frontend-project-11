@@ -27,8 +27,9 @@ const runApp = () => {
     errors: [],
     posts: [],
     uiState: {
-      viewedPostId: null,
-      modalVisible: false,
+      // viewedPostId: null,
+      viewedPostId: [],
+      modalPostId: null,
     },
     loading: {
       status: "idle",
@@ -53,6 +54,20 @@ const runApp = () => {
 
     const watchedState = watch(state, i18n, elements);
 
+    elements.posts.addEventListener("click", (e) => {
+        const button = e.target.closest("button[data-id]");
+        if (!button) return;
+
+        const postId = button.dataset.id;
+        // watchedState.uiState.viewedPostId = postId;
+        if (!watchedState.uiState.viewedPostId.includes(postId)) {
+          watchedState.uiState.viewedPostId.push(postId);
+        }
+        watchedState.uiState.modalPostId = postId;
+      },
+      true
+    );
+
     if (elements.form) {
       elements.form.addEventListener("submit", (e) =>
         handleFormSubmit(e, watchedState)
@@ -62,23 +77,24 @@ const runApp = () => {
     setTimeout(() => updateFeeds(watchedState), 5000);
   });
 
-
   const updateFeeds = (watchedState) => {
     const feedPromises = watchedState.feeds.map((feed) =>
-      getUrl(feed.url).then((response) => {
-        return _.differenceBy(response.posts, watchedState.posts, "link");
-      })
+      getUrl(feed.url)
+        .then((response) => {
+          return _.differenceBy(response.posts, watchedState.posts, "link");
+        })
         .catch(() => [])
     );
 
-    Promise.all(feedPromises).then((allNewPosts) => {
-      // console.log('получили все фиды', allNewPosts)
-      // console.log('фиды', watchedState.feeds)
-      const newPosts = _.flatten(allNewPosts);
-      if (newPosts.length > 0) {
-        watchedState.posts.unshift(...newPosts);
-      }
-    })
+    Promise.all(feedPromises)
+      .then((allNewPosts) => {
+        // console.log('получили все фиды', allNewPosts)
+        // console.log('фиды', watchedState.feeds)
+        const newPosts = _.flatten(allNewPosts);
+        if (newPosts.length > 0) {
+          watchedState.posts.unshift(...newPosts);
+        }
+      })
       .finally(() => {
         // console.log('перезапустили таймер')
         setTimeout(() => updateFeeds(watchedState), 5000);
@@ -90,7 +106,6 @@ const runApp = () => {
     watchedState.form.status = "submitted";
     watchedState.loading.status = "idle";
     const url = elements.urlInput.value.trim();
-
 
     const schema = yup.object().shape({
       url: yup
@@ -116,43 +131,10 @@ const runApp = () => {
 
             watchedState.feeds.push(response.feed);
             watchedState.posts.push(...response.posts);
-
-            elements.posts.addEventListener("click", (e) => {
-              const button = e.target.closest("button[data-id]");
-              if (!button) return;
-
-              const postId = button.dataset.id;
-              watchedState.uiState.viewedPostId = postId;
-
-              console.log(postId);
-              // console.log(watchedState.uiState);
-              watchedState.posts.forEach(post => {
-                if (post.id === postId) {
-                  const modalTitle = document.querySelector('.modal-title');
-                  const modalBody = document.querySelector('.modal-body');
-                  const btn = document.querySelector('.btn.btn-primary');
-                  modalTitle.textContent = post.title;
-                  modalBody.innerHTML = post.description;
-                  btn.href = post.link;
-                  console.log(btn)
-                }
-
-              } );
-              const modalElement = document.getElementById('modal');
-              const modal = new bootstrap.Modal(modalElement); // Создаем экземпляр модального окна
-              modal.show();
-
-              console.log(modal);
-
-            }, true)
-
           })
           .catch((error) => {
             watchedState.errors = [error.message];
           });
-        // .finally(() => {
-        //   updateFeeds(watchedState);
-        // });
 
         elements.urlInput.value = "";
       })
