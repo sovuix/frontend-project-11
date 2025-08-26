@@ -5,7 +5,7 @@ import { setLocale } from "yup";
 import initI18n from "./i18n/i18n.js";
 import { watch } from "./view.js";
 
-import getUrl from "./rssFeedParcer.js";
+import getUrl from "./parser.js";
 import _ from "lodash";
 
 export const runApp = () => {
