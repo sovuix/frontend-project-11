@@ -24,14 +24,14 @@ const clearError = () => {
 const renderTemplatePosts = (posts, elements, i18n, uiState) => {
   const container = elements.posts;
   const tmpl = elements.templatePosts;
-  const container2 = tmpl.content.cloneNode(true);
+  const clonedTemplate = tmpl.content.cloneNode(true);
 
-  const textPosts = container2.querySelector(".card-title.h4");
+  const textPosts = clonedTemplate.querySelector(".card-title.h4");
   if (textPosts) {
     textPosts.textContent = i18n.t("posts");
   }
 
-  const postsList = container2.querySelector("ul.list-group");
+  const postsList = clonedTemplate.querySelector("ul.list-group");
 
   const postsLi = postsList.querySelector("li");
 
@@ -57,7 +57,7 @@ const renderTemplatePosts = (posts, elements, i18n, uiState) => {
   });
 
   container.innerHTML = "";
-  container.appendChild(container2);
+  container.appendChild(clonedTemplate);
 };
 
 const renderTemplateFeeds = (feeds, elements, i18n) => {
