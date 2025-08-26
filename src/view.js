@@ -48,7 +48,7 @@ const renderTemplatePosts = (posts, elements, i18n, uiState) => {
       link.dataset.id = post.id;
       button.dataset.id = post.id;
     }
-    if (uiState.viewedPostId.includes(post.id)) {
+    if (uiState.viewedPostId.has(post.id)) {
       link.classList.remove("fw-bold");
       link.classList.add("fw-normal", "link-secondary");
     }
@@ -92,7 +92,7 @@ const renderTemplateFeeds = (feeds, elements, i18n) => {
   container.appendChild(container2);
 };
 
-const renderModal = (posts, uiState, elements) => {
+const renderModal = (posts, uiState) => {
   if (!uiState.modalPostId) return;
 
   const post = posts.find((p) => p.id === uiState.modalPostId);
@@ -103,14 +103,9 @@ const renderModal = (posts, uiState, elements) => {
   const btn = document.querySelector(".btn.btn-primary");
 
   if (modalTitle) modalTitle.textContent = post.title;
-  if (modalBody) modalBody.innerHTML = post.description;
+  if (modalBody) modalBody.textContent = post.description;
   if (btn) btn.href = post.link;
 
-  const modalElement = document.getElementById("modal");
-  if (modalElement) {
-    const modal = new bootstrap.Modal(modalElement);
-    modal.show();
-  }
 };
 
 export const watch = (state, i18n, elements) => {
