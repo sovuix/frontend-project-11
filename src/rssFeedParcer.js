@@ -4,6 +4,8 @@ import _ from "lodash";
 const PROXY_HEXLET_URL = "https://allorigins.hexlet.app/get";
 const DEFAULT_FEED_URL = "https://lorem-rss.hexlet.app/feed";
 
+// TODO: вынести в отдельный модуль
+// найминг модуля
 const wrapUrl = (url) => {
     const proxyUrl = new URL(PROXY_HEXLET_URL);
     proxyUrl.searchParams.set('url', url);
@@ -24,6 +26,7 @@ function fetchFeed(url = DEFAULT_FEED_URL) {
         });
 }
 
+// TODO: убрать url  
 function parseFeed(content, url) {
     try {
         const parser = new DOMParser();
