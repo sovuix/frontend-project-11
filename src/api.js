@@ -1,5 +1,4 @@
 import axios from "axios";
-import _ from "lodash";
 
 const PROXY_HEXLET_URL = "https://allorigins.hexlet.app/get";
 const DEFAULT_FEED_URL = "https://lorem-rss.hexlet.app/feed";
