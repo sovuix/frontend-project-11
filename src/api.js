@@ -1,24 +1,24 @@
-import axios from "axios";
+import axios from 'axios';
 
-const PROXY_HEXLET_URL = "https://allorigins.hexlet.app/get";
+const PROXY_HEXLET_URL = 'https://allorigins.hexlet.app/get';
 
 const wrapUrl = (url) => {
-    const proxyUrl = new URL(PROXY_HEXLET_URL);
-    proxyUrl.searchParams.set('url', url);
-    proxyUrl.searchParams.set('disableCache', 'true');
-    return proxyUrl;
-}
+  const proxyUrl = new URL(PROXY_HEXLET_URL);
+  proxyUrl.searchParams.set('url', url);
+  proxyUrl.searchParams.set('disableCache', 'true');
+  return proxyUrl;
+};
 
 export function fetchFeed(url) {
-    return axios.get(wrapUrl(url))
-        .then(response => {
-            if (response.status !== 200) {
-                throw new Error('errors.networkError');
-            }
-            return response.data.contents;
-        })
-        .catch(() => {
-            throw new Error('errors.networkError');
-        });
+  return axios
+    .get(wrapUrl(url))
+    .then((response) => {
+      if (response.status !== 200) {
+        throw new Error('errors.networkError');
+      }
+      return response.data.contents;
+    })
+    .catch(() => {
+      throw new Error('errors.networkError');
+    });
 }
-

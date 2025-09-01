@@ -7,6 +7,6 @@
     "networkError": "Ошибка сети"
   },
   "success": "RSS успешно загружен",
-  "posts" : "Посты",
-  "feeds" : "Фиды"
+  "posts": "Посты",
+  "feeds": "Фиды"
 }

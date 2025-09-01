@@ -1,21 +1,21 @@
-import * as yup from "yup";
-import "bootstrap";
-import { setLocale } from "yup";
-import initI18n from "./i18n/i18n.js";
-import { watch } from "./view.js";
-import getUrl from "./parser.js";
-import _ from "lodash";
+import * as yup from 'yup';
+import 'bootstrap';
+import { setLocale } from 'yup';
+import initI18n from './i18n/i18n.js';
+import { watch } from './view.js';
+import getUrl from './parser.js';
+import _ from 'lodash';
 
 export const runApp = () => {
   const elements = {
-    urlInput: document.querySelector("#url-input"),
+    urlInput: document.querySelector('#url-input'),
     submitButton: document.querySelector("button[type='submit']"),
-    form: document.querySelector(".rss-form"),
-    feedback: document.querySelector(".feedback"),
-    posts: document.querySelector(".posts"),
-    feeds: document.querySelector(".feeds"),
-    templatePosts: document.getElementById("posts"),
-    templateFeeds: document.getElementById("feeds"),
+    form: document.querySelector('.rss-form'),
+    feedback: document.querySelector('.feedback'),
+    posts: document.querySelector('.posts'),
+    feeds: document.querySelector('.feeds'),
+    templatePosts: document.getElementById('posts'),
+    templateFeeds: document.getElementById('feeds'),
   };
   const state = {
     feeds: [],
@@ -26,28 +26,30 @@ export const runApp = () => {
       modalPostId: null,
     },
     loading: {
-      status: "idle",
+      status: 'idle',
     },
     form: {
-      status: "filling", 
+      status: 'filling',
     },
   };
 
   initI18n().then((i18n) => {
     setLocale({
       mixed: {
-        required: "errors.required",
-        notOneOf: "errors.duplicateUrl",
+        required: 'errors.required',
+        notOneOf: 'errors.duplicateUrl',
       },
       string: {
-        url: "errors.invalidUrl",
+        url: 'errors.invalidUrl',
       },
     });
 
     const watchedState = watch(state, i18n, elements);
 
-    elements.posts.addEventListener("click", (e) => {
-        const button = e.target.closest("button[data-id]");
+    elements.posts.addEventListener(
+      'click',
+      (e) => {
+        const button = e.target.closest('button[data-id]');
         if (!button) return;
 
         const postId = button.dataset.id;
@@ -56,12 +58,12 @@ export const runApp = () => {
         }
         watchedState.uiState.modalPostId = postId;
       },
-      true
+      true,
     );
 
     if (elements.form) {
-      elements.form.addEventListener("submit", (e) =>
-        handleFormSubmit(e, watchedState)
+      elements.form.addEventListener('submit', (e) =>
+        handleFormSubmit(e, watchedState),
       );
     }
 
@@ -70,10 +72,9 @@ export const runApp = () => {
 
   const updateFeeds = (watchedState) => {
     const feedPromises = watchedState.feeds.map((feed) =>
-      getUrl(feed.url)
-        .then((response) => {
-          return _.differenceBy(response.posts, watchedState.posts, "link");
-        })
+      getUrl(feed.url).then((response) => {
+        return _.differenceBy(response.posts, watchedState.posts, 'link');
+      }),
     );
 
     Promise.all(feedPromises)
@@ -90,8 +91,8 @@ export const runApp = () => {
 
   function handleFormSubmit(e, watchedState) {
     e.preventDefault();
-    watchedState.form.status = "submitted";
-    watchedState.loading.status = "idle";
+    watchedState.form.status = 'submitted';
+    watchedState.loading.status = 'idle';
     const url = elements.urlInput.value.trim();
 
     const schema = yup.object().shape({
@@ -105,23 +106,23 @@ export const runApp = () => {
     schema
       .validate({ url })
       .then(() => {
-        watchedState.loading.status = "loading";
+        watchedState.loading.status = 'loading';
         console.log(state.loading.status);
 
         getUrl(url)
           .then((response) => {
-            watchedState.loading.status = "loaded";
+            watchedState.loading.status = 'loaded';
             watchedState.errors = [];
             console.log(state.loading.status);
 
             watchedState.feeds.push({ url, ...response.feed });
 
-            const postId = response.posts.map(post => ({
+            const postId = response.posts.map((post) => ({
               ...post,
-              id: _.uniqueId()
+              id: _.uniqueId(),
             }));
             watchedState.posts.push(...postId);
-            elements.urlInput.value = "";
+            elements.urlInput.value = '';
           })
           .catch((error) => {
             watchedState.errors = [error.message];
