@@ -18,7 +18,7 @@ export function fetchFeed(url) {
             return response.data.contents;
         })
         .catch(error => {
-            throw error;
+            throw new Error('errors.networkError');
         });
 }
 
