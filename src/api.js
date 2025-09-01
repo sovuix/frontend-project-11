@@ -13,7 +13,7 @@ export function fetchFeed(url) {
     return axios.get(wrapUrl(url))
         .then(response => {
             if (response.status !== 200) {
-                throw new Error('Invalid response from proxy');
+                throw new Error('errors.networkError');
             }
             return response.data.contents;
         })
