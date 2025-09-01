@@ -2,7 +2,7 @@
   "errors": {
     "required": "Поле обязательно для заполнения",
     "invalidUrl": "Ссылка должна быть валидным URL",
-    "duplicateUrl": "Такой URL уже добавлен",
+    "duplicateUrl": "RSS уже существует",
     "invalidRSS": "Ссылка не содержит корректного RSS"
   },
   "success": "RSS успешно загружен",

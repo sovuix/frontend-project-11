@@ -2,7 +2,7 @@
     "errors" : {
       "required": "required field",
       "invalidUrl": "incorrect URL",
-      "duplicateUrl": "This URL has already been added",
+      "duplicateUrl": "RSS already exists",
       "invalidRSS": "The resource does not contain valid RSS"
     },
       "success": "RSS loaded successfully",
