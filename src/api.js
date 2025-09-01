@@ -1,8 +1,6 @@
 import axios from "axios";
 
 const PROXY_HEXLET_URL = "https://allorigins.hexlet.app/get";
-const DEFAULT_FEED_URL = "https://lorem-rss.hexlet.app/feed";
-
 
 const wrapUrl = (url) => {
     const proxyUrl = new URL(PROXY_HEXLET_URL);
@@ -11,7 +9,7 @@ const wrapUrl = (url) => {
     return proxyUrl;
 }
 
-export function fetchFeed(url = DEFAULT_FEED_URL) {
+export function fetchFeed(url) {
     return axios.get(wrapUrl(url))
         .then(response => {
             if (response.status !== 200) {
