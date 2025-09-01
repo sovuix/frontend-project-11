@@ -3,7 +3,8 @@
       "required": "required field",
       "invalidUrl": "incorrect URL",
       "duplicateUrl": "RSS already exists",
-      "invalidRSS": "The resource does not contain valid RSS"
+      "invalidRSS": "The resource does not contain valid RSS",
+      "networkError": "Network Error"
     },
       "success": "RSS loaded successfully",
       "posts" : "Posts",
