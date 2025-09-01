@@ -1,9 +1,6 @@
-import _ from "lodash";
 import { fetchFeed } from "./api";
 
- 
 function parseFeed(content) {
-    try {
         const parser = new DOMParser();
         const xmlDoc = parser.parseFromString(content, "text/xml");
         const channel = xmlDoc.querySelector("channel");
@@ -27,13 +24,13 @@ function parseFeed(content) {
                 link: getTextContent(item, "link"),
             })),
         };
-    } catch (error) {
-        throw error;
-    }
 }
 
 export default function loadRssFeed(url) {
     return fetchFeed(url)
-        .then((content) => parseFeed(content, url));
+        .then((content) => parseFeed(content, url))
+        .catch((error) => {
+            throw error;
+        });
 }
 
