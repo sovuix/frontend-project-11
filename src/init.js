@@ -74,7 +74,6 @@ export const runApp = () => {
         .then((response) => {
           return _.differenceBy(response.posts, watchedState.posts, "link");
         })
-        .catch(() => [])
     );
 
     Promise.all(feedPromises)
