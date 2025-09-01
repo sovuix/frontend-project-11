@@ -13,6 +13,16 @@ function showError(state, i18n, elements) {
   }
 }
 
+function blockedButton(loadingState, elements) { 
+  if (loadingState.status === "loading") {
+    elements.submitButton.disabled = true;
+    elements.urlInput.readOnly = true;
+  } else {
+    elements.submitButton.disabled = false;
+    elements.urlInput.readOnly = false;
+  }
+}
+
 const clearError = () => {
   const urlInput = document.querySelector("#url-input");
   const feedback = document.querySelector(".feedback");
@@ -125,6 +135,9 @@ export const watch = (state, i18n, elements) => {
         break;
       case "uiState.viewedPostId":
         renderTemplatePosts(state.posts, elements, i18n, state.uiState);
+        break;
+      case "loading.status":
+        blockedButton(state.loading, elements);
         break;
     }
   });

@@ -6,13 +6,11 @@ function parseFeed(content) {
     try {
         const parser = new DOMParser();
         const xmlDoc = parser.parseFromString(content, "text/xml");
-
-        if (xmlDoc.querySelector('parsererror')) {
-            throw new Error('Invalid XML content');
-        }
-
         const channel = xmlDoc.querySelector("channel");
-        if (!channel) throw new Error('not a valid RSS feed');
+
+        if (xmlDoc.querySelector('parsererror') || !channel) {
+             throw new Error('errors.invalidRSS');
+}
 
         const getTextContent = (element, selector) =>
             element.querySelector(selector)?.textContent || '';
@@ -27,11 +25,9 @@ function parseFeed(content) {
                 title: getTextContent(item, "title"),
                 description: getTextContent(item, "description"),
                 link: getTextContent(item, "link"),
-                id: _.uniqueId(),
             })),
         };
     } catch (error) {
-        console.error("Parsing error:", error);
         throw error;
     }
 }

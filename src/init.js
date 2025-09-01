@@ -1,16 +1,15 @@
 import * as yup from "yup";
 import "bootstrap";
-
 import { setLocale } from "yup";
 import initI18n from "./i18n/i18n.js";
 import { watch } from "./view.js";
-
 import getUrl from "./parser.js";
 import _ from "lodash";
 
 export const runApp = () => {
   const elements = {
     urlInput: document.querySelector("#url-input"),
+    submitButton: document.querySelector("button[type='submit']"),
     form: document.querySelector(".rss-form"),
     feedback: document.querySelector(".feedback"),
     posts: document.querySelector(".posts"),
@@ -107,8 +106,6 @@ export const runApp = () => {
     schema
       .validate({ url })
       .then(() => {
-        watchedState.errors = [];
-
         watchedState.loading.status = "loading";
         console.log(state.loading.status);
 
@@ -119,13 +116,17 @@ export const runApp = () => {
             console.log(state.loading.status);
 
             watchedState.feeds.push({ url, ...response.feed });
-            watchedState.posts.push(...response.posts);
+
+            const postId = response.posts.map(post => ({
+              ...post,
+              id: _.uniqueId()
+            }));
+            watchedState.posts.push(...postId);
+            elements.urlInput.value = "";
           })
           .catch((error) => {
             watchedState.errors = [error.message];
           });
-
-        elements.urlInput.value = "";
       })
       .catch((error) => {
         watchedState.errors = error.errors;
