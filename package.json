@@ -1,6 +1,7 @@
 {
   "name": "@hexlet/code",
   "version": "1.0.0",
+  "type": "module",
   "description": "[![Actions Status](https://github.com/sovuix/frontend-project-11/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/sovuix/frontend-project-11/actions)",
   "main": "src/index.js",
   "devDependencies": {
@@ -16,8 +17,7 @@
     "dev": "vite",
     "test": "echo \"Error: no test specified\" && exit 1",
     "format": "prettier --write .",
-    "format:check": "prettier --check .",
-    "type": "modal"
+    "format:check": "prettier --check ."
   },
   "author": "",
   "license": "ISC",
