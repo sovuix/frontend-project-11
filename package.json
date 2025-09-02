@@ -16,7 +16,8 @@
     "dev": "vite",
     "test": "echo \"Error: no test specified\" && exit 1",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "type": "modal"
   },
   "author": "",
   "license": "ISC",
