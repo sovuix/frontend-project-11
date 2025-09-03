@@ -1,12 +1,12 @@
-import i18next from 'i18next';
-import en from '../../assets/locales/en.json';
-import ru from '../../assets/locales/ru.json';
+import i18next from 'i18next'
+import en from '../../assets/locales/en.json'
+import ru from '../../assets/locales/ru.json'
 
-const translations = { en, ru };
+const translations = { en, ru }
 
 const initI18n = () => {
-  const lang = localStorage.getItem('lang') || 'ru';
-  const i18nInstance = i18next.createInstance();
+  const lang = localStorage.getItem('lang') || 'ru'
+  const i18nInstance = i18next.createInstance()
   return i18nInstance
     .init({
       lng: lang,
@@ -15,7 +15,7 @@ const initI18n = () => {
         [lang]: { translation: translations[lang] },
       },
     })
-    .then(() => i18nInstance);
-};
+    .then(() => i18nInstance)
+}
 
-export default initI18n;
+export default initI18n

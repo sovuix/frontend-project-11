@@ -1,4 +1,4 @@
-import './app.scss';
-import { runApp } from './init.js';
+import './app.scss'
+import { runApp } from './init.js'
 
-runApp();
+runApp()
