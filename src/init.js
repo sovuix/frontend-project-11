@@ -5,6 +5,7 @@ import initI18n from './i18n/i18n.js'
 import { watch } from './view.js'
 import getUrl from './parser.js'
 import _ from 'lodash'
+import yupLocale from '../assets/locales/yupLocale.js'
 
 export const runApp = () => {
   const elements = {
@@ -34,38 +35,22 @@ export const runApp = () => {
   }
 
   initI18n().then((i18n) => {
-    setLocale({
-      mixed: {
-        required: 'errors.required',
-        notOneOf: 'errors.duplicateUrl',
-      },
-      string: {
-        url: 'errors.invalidUrl',
-      },
-    })
+    setLocale(yupLocale)
 
     const watchedState = watch(state, i18n, elements)
 
-    elements.posts.addEventListener(
-      'click',
-      (e) => {
-        if (!e.target.hasAttribute('data-id')) return
+    elements.posts.addEventListener('click', (e) => {
+      if (!e.target.hasAttribute('data-id')) return
 
-        const postId = e.target.dataset.id
+      const postId = e.target.dataset.id
 
-        if (!watchedState.uiState.viewedPostId.has(postId)) {
-          watchedState.uiState.viewedPostId.add(postId)
-        }
-        watchedState.uiState.modalPostId = postId
-      },
-      true,
+      watchedState.uiState.viewedPostId.add(postId)
+      watchedState.uiState.modalPostId = postId
+    })
+
+    elements.form.addEventListener('submit', e =>
+      handleFormSubmit(e, watchedState),
     )
-
-    if (elements.form) {
-      elements.form.addEventListener('submit', e =>
-        handleFormSubmit(e, watchedState),
-      )
-    }
 
     setTimeout(() => updateFeeds(watchedState), 5000)
   })
