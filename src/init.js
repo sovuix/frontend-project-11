@@ -92,7 +92,6 @@ export const runApp = () => {
   function handleFormSubmit(e, watchedState) {
     e.preventDefault()
     watchedState.form.status = 'submitted'
-    watchedState.loading.status = 'idle'
     const url = elements.urlInput.value.trim()
 
     const schema = yup.object().shape({
@@ -125,6 +124,7 @@ export const runApp = () => {
             elements.urlInput.value = ''
           })
           .catch((error) => {
+            watchedState.loading.status = 'idle'
             watchedState.errors = [error.message]
           })
       })
